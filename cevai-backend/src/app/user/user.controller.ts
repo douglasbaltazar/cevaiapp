@@ -9,12 +9,14 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
   // ApiOperation,
   // ApiResponse
 } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,6 +24,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('api/v1/users')
 @ApiTags('users')
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

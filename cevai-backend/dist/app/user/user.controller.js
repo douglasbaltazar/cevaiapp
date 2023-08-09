@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const passport_1 = require("@nestjs/passport");
 const user_service_1 = require("./user.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
@@ -77,6 +78,7 @@ __decorate([
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('api/v1/users'),
     (0, swagger_1.ApiTags)('users'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

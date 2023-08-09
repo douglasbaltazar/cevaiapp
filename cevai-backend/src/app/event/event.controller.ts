@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -20,9 +21,11 @@ import ShowEventSwagger from './swagger/show-event.swagger';
 import UpdateEventSwagger from './swagger/update-event.swagger';
 import { BadRequestSwagger } from '../helpers/swagger/bad-request.swagger';
 import { NotFoundSwagger } from '../helpers/swagger/not-found.swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/v1/events')
 @ApiTags('events')
+@UseGuards(AuthGuard('jwt'))
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 

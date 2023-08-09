@@ -21,7 +21,16 @@ export class UserService {
 
   async findOne(id: string) {
     try {
+      console.log('id', id);
       return await this.usersRepository.findOneByOrFail({ id });
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  async findOneByEmail(email: string) {
+    try {
+      return await this.usersRepository.findOneByOrFail({ email });
     } catch (error) {
       throw new NotFoundException(error.message);
     }

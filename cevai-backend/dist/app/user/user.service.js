@@ -29,7 +29,16 @@ let UserService = exports.UserService = class UserService {
     }
     async findOne(id) {
         try {
+            console.log('id', id);
             return await this.usersRepository.findOneByOrFail({ id });
+        }
+        catch (error) {
+            throw new common_2.NotFoundException(error.message);
+        }
+    }
+    async findOneByEmail(email) {
+        try {
+            return await this.usersRepository.findOneByOrFail({ email });
         }
         catch (error) {
             throw new common_2.NotFoundException(error.message);

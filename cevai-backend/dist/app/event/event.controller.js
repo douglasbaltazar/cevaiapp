@@ -24,6 +24,7 @@ const show_event_swagger_1 = require("./swagger/show-event.swagger");
 const update_event_swagger_1 = require("./swagger/update-event.swagger");
 const bad_request_swagger_1 = require("../helpers/swagger/bad-request.swagger");
 const not_found_swagger_1 = require("../helpers/swagger/not-found.swagger");
+const passport_1 = require("@nestjs/passport");
 let EventController = exports.EventController = class EventController {
     constructor(eventService) {
         this.eventService = eventService;
@@ -140,6 +141,7 @@ __decorate([
 exports.EventController = EventController = __decorate([
     (0, common_1.Controller)('api/v1/events'),
     (0, swagger_1.ApiTags)('events'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __metadata("design:paramtypes", [event_service_1.EventService])
 ], EventController);
 //# sourceMappingURL=event.controller.js.map
