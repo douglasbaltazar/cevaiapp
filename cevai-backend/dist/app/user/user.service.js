@@ -12,43 +12,45 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EventService = void 0;
+exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
-const event_entity_1 = require("./entity/event.entity");
-const typeorm_1 = require("@nestjs/typeorm");
-const typeorm_2 = require("typeorm");
+const typeorm_1 = require("typeorm");
+const typeorm_2 = require("@nestjs/typeorm");
+const User_entity_1 = require("./entity/User.entity");
 const common_2 = require("@nestjs/common");
-let EventService = exports.EventService = class EventService {
-    constructor(eventRepository) {
-        this.eventRepository = eventRepository;
+let UserService = exports.UserService = class UserService {
+    constructor(usersRepository) {
+        this.usersRepository = usersRepository;
     }
     async findAll() {
-        return await this.eventRepository.find();
+        return await this.usersRepository.find({
+            select: ['id', 'firstName', 'lastName', 'email', 'status', 'gender'],
+        });
     }
     async findOne(id) {
         try {
-            return await this.eventRepository.findOneByOrFail({ id });
+            return await this.usersRepository.findOneByOrFail({ id });
         }
         catch (error) {
             throw new common_2.NotFoundException(error.message);
         }
     }
     async create(data) {
-        return await this.eventRepository.save(this.eventRepository.create(data));
+        return await this.usersRepository.save(this.usersRepository.create(data));
     }
     async update(id, data) {
-        const event = await this.findOne(id);
-        this.eventRepository.merge(event, data);
-        return await this.eventRepository.save(event);
+        const user = await this.findOne(id);
+        this.usersRepository.merge(user, data);
+        return await this.usersRepository.save(user);
     }
     async deleteById(id) {
         await this.findOne(id);
-        await this.eventRepository.softDelete(id);
+        await this.usersRepository.softDelete(id);
     }
 };
-exports.EventService = EventService = __decorate([
+exports.UserService = UserService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(event_entity_1.EventEntity)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
-], EventService);
-//# sourceMappingURL=event.service.js.map
+    __param(0, (0, typeorm_2.InjectRepository)(User_entity_1.UserEntity)),
+    __metadata("design:paramtypes", [typeorm_1.Repository])
+], UserService);
+//# sourceMappingURL=user.service.js.map

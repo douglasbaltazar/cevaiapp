@@ -12,21 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateEventDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const messages_helper_1 = require("../../helpers/messages.helper");
 class CreateEventDto {
 }
 exports.CreateEventDto = CreateEventDto;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNotEmpty)({ message: (0, messages_helper_1.MessageHelperFn)('name') }),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateEventDto.prototype, "name", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNotEmpty)({ message: (0, messages_helper_1.MessageHelperFn)('bands') }),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateEventDto.prototype, "bands", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNotEmpty)({ message: (0, messages_helper_1.MessageHelperFn)('status') }),
     (0, class_validator_1.IsIn)([0, 1]),
     (0, swagger_1.ApiPropertyOptional)(),
     __metadata("design:type", Number)

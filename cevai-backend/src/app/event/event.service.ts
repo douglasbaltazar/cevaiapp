@@ -19,7 +19,7 @@ export class EventService {
 
   async findOne(id: string) {
     try {
-      return await this.eventRepository.findOne({ where: { id } });
+      return await this.eventRepository.findOneByOrFail({ id });
     } catch (error) {
       throw new NotFoundException(error.message);
     }
