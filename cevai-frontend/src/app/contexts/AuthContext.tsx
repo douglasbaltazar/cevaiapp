@@ -43,8 +43,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     async function signIn({ email, password }: IUserSignIn) {
-        // let token: string;
-        // let user: IUserSignInResponse;
         const { token, user } = await SignInRequest({
             email,
             password,
