@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,6 +21,7 @@ export class UserEntity {
   @Column({ name: 'last_name' })
   lastName: string;
 
+  @PrimaryColumn()
   @Column()
   email: string;
 

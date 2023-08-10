@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entity/User.entity';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, ConflictException } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -36,7 +36,14 @@ export class UserService {
   }
 
   async create(data: CreateUserDto) {
-    return await this.usersRepository.save(this.usersRepository.create(data));
+    const user = await this.usersRepository.findOne({
+      where: { email: data.email },
+    });
+    if (!user) {
+      return await this.usersRepository.save(this.usersRepository.create(data));
+    } else {
+      throw new ConflictException('Já existe um usuario com esse email.');
+    }
   }
 
   async update(id: string, data: UpdateUserDto) {
