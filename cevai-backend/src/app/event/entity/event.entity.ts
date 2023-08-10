@@ -5,8 +5,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserEntity } from 'src/app/user/entity/User.entity';
 
 @Entity({ name: 'events' })
 export class EventEntity {
@@ -37,4 +42,18 @@ export class EventEntity {
   @DeleteDateColumn({ name: 'deleted_at' })
   @ApiProperty()
   deletedAt: string;
+
+  @ManyToMany(() => UserEntity, (user) => user.events)
+  @JoinTable({
+    name: 'users_events',
+    joinColumn: {
+      name: 'event_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+  })
+  users: UserEntity[];
 }

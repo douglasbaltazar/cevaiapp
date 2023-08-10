@@ -4,11 +4,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { hashSync } from 'bcrypt';
+import { EventEntity } from 'src/app/event/entity/event.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -47,4 +51,18 @@ export class UserEntity {
   hashPassword() {
     this.password = hashSync(this.password, 10);
   }
+
+  @ManyToMany(() => EventEntity, (evento) => evento.users)
+  @JoinTable({
+    name: 'users_events',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'event_id',
+      referencedColumnName: 'id',
+    },
+  })
+  events: EventEntity[];
 }
