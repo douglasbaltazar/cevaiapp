@@ -24,11 +24,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('api/v1/users')
 @ApiTags('users')
-@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthGuard('jwt'))
   async index() {
     return await this.userService.findAll();
   }
@@ -39,11 +39,13 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
   async show(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.userService.findOne(id);
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
   async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() body: UpdateUserDto,
@@ -52,6 +54,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
     await this.userService.deleteById(id);

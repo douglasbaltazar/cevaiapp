@@ -50,7 +50,25 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
     }, [isSubmitSuccessful, reset]);
 
     const onSubmitHandler: SubmitHandler<LoginInput> = (values) => {
-        console.log(values);
+        axios
+            .post("http://localhost:3000/api/auth/login", values)
+            .then((res) => {
+                localStorage.setItem("token", res.data.token);
+            }).catch(() => {
+                console.log('deu bode');
+            }) 
+            .then(() => {
+                axios
+                    .get("http://localhost:3000/api/v1/users", {
+                        headers: {
+                            Authorization:
+                                "Bearer " + localStorage.getItem("token"),
+                        },
+                    })
+                    .then((res) => {
+                        console.log(res.data);
+                    });
+            });
     };
 
     const handleSubmit2 = (event: React.FormEvent<HTMLFormElement>) => {

@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('CeVai API')
     .setVersion('0.01')
     .build();
+  app.enableCors();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 

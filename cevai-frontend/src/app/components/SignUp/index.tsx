@@ -11,6 +11,7 @@ import { object, string, TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegexHelper } from "@/app/utils/utils";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import CreateIcon from "@mui/icons-material/Create";
 import {
@@ -28,10 +29,10 @@ type Props = {
 
 export default function SignUp({ handleLoginFormSelected }: Props) {
     const registerSchema = object({
-        first_name: string()
+        firstName: string()
             .nonempty("Nome é obrigatório")
             .max(40, "Nome muito longo"),
-        last_name: string()
+        lastName: string()
             .nonempty("Ultimo nome é obrigatório")
             .max(40, "Ultimo nome é obrigatório"),
         email: string()
@@ -47,7 +48,6 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
                 "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais."
             ),
         confirm_password: string()
-            .nonempty("Senha é obrigatório")
             .min(8, "Senha deve ter no minimo 8 caracteres")
             .max(32, "Senha deve ter no máximo 32 caracteres")
             .regex(
@@ -81,15 +81,28 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
     }, [isSubmitSuccessful, reset]);
 
     const onSubmitHandler: SubmitHandler<RegisterInput> = (values) => {
-        console.log(values);
+        let valores = {
+            status: 0,
+            ...values,
+        };
+        axios.post("http://localhost:3000/api/v1/users", valores).then(() => {
+            axios
+                .post("http://localhost:3000/api/auth/login", {
+                    email: values.email,
+                    password: values.password,
+                })
+                .then((res) => {
+                    localStorage.setItem("token", res.data.token);
+                });
+        });
     };
 
     const handleSubmit2 = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
-            first_name: data.get("first_name"),
-            last_name: data.get("last_name"),
+            firstName: data.get("firstName"),
+            lastName: data.get("lastName"),
             email: data.get("email"),
             password: data.get("password"),
             confirm_password: data.get("confirm_password"),
@@ -129,30 +142,28 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
                         margin="normal"
                         required
                         fullWidth
-                        id="first_name"
+                        id="firstName"
                         label="Primeiro Nome"
                         autoFocus
-                        error={!!errors["first_name"]}
+                        error={!!errors["firstName"]}
                         helperText={
-                            errors["first_name"]
-                                ? errors["first_name"].message
+                            errors["firstName"]
+                                ? errors["firstName"].message
                                 : ""
                         }
-                        {...register("first_name")}
+                        {...register("firstName")}
                     />
                     <TextField
                         margin="normal"
                         required
                         fullWidth
-                        id="last_name"
+                        id="lastName"
                         label="Ultimo Nome"
-                        error={!!errors["last_name"]}
+                        error={!!errors["lastName"]}
                         helperText={
-                            errors["last_name"]
-                                ? errors["last_name"].message
-                                : ""
+                            errors["lastName"] ? errors["lastName"].message : ""
                         }
-                        {...register("last_name")}
+                        {...register("lastName")}
                     />
                     <TextField
                         margin="normal"
