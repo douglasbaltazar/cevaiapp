@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -9,13 +9,51 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import LoginIcon from "@mui/icons-material/Login";
 import axios from "axios";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { object, string, TypeOf } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegexHelper } from "@/app/utils/utils";
 
 type Props = {
     handleLoginFormSelected: () => void;
 };
 
 export default function SignIn({ handleLoginFormSelected }: Props) {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const loginSchema = object({
+        email: string()
+            .nonempty("Email é obrigatório")
+            .max(255, "O Email está muito longo")
+            .email("O Email é inválido"),
+        password: string()
+            .nonempty("Senha é obrigatório")
+            .min(8, "Senha deve ter no minimo 8 caracteres")
+            .max(32, "Senha deve ter no máximo 32 caracteres")
+            .regex(
+                RegexHelper.passwordRegex,
+                "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais."
+            ),
+    });
+    type LoginInput = TypeOf<typeof loginSchema>;
+    const {
+        register,
+        formState: { errors, isSubmitSuccessful },
+        reset,
+        handleSubmit,
+    } = useForm<LoginInput>({
+        resolver: zodResolver(loginSchema),
+    });
+
+    useEffect(() => {
+        if (isSubmitSuccessful) {
+            reset();
+        }
+    }, [isSubmitSuccessful, reset]);
+
+    const onSubmitHandler: SubmitHandler<LoginInput> = (values) => {
+        console.log(values);
+    };
+
+    const handleSubmit2 = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         // console.log({
@@ -26,9 +64,23 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
             email: data.get("email"),
             password: data.get("password"),
         };
-        axios.post("http://localhost:3000/api/auth/login", form).then((res) => {
-            localStorage.setItem("token", res.data.token);
-        });
+        axios
+            .post("http://localhost:3000/api/auth/login", form)
+            .then((res) => {
+                localStorage.setItem("token", res.data.token);
+            })
+            .then(() => {
+                axios
+                    .get("http://localhost:3000/api/v1/users", {
+                        headers: {
+                            Authorization:
+                                "Bearer " + localStorage.getItem("token"),
+                        },
+                    })
+                    .then((res) => {
+                        console.log(res.data);
+                    });
+            });
     };
 
     return (
@@ -49,7 +101,7 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
                 </Typography>
                 <Box
                     component="form"
-                    onSubmit={handleSubmit}
+                    onSubmit={handleSubmit(onSubmitHandler)}
                     noValidate
                     sx={{ mt: 1 }}
                 >
@@ -59,19 +111,27 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
                         fullWidth
                         id="email"
                         label="E-mail"
-                        name="email"
                         autoComplete="email"
                         autoFocus
+                        error={!!errors["email"]}
+                        helperText={
+                            errors["email"] ? errors["email"].message : ""
+                        }
+                        {...register("email")}
                     />
                     <TextField
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
                         label="Senha"
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        error={!!errors["password"]}
+                        helperText={
+                            errors["password"] ? errors["password"].message : ""
+                        }
+                        {...register("password")}
                     />
                     <Button
                         type="submit"

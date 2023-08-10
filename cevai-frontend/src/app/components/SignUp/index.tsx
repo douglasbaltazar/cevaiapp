@@ -1,20 +1,21 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { object, string, TypeOf } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegexHelper } from "@/app/utils/utils";
+import { useState, useEffect } from "react";
 
 import CreateIcon from "@mui/icons-material/Create";
 import {
     FormControl,
+    FormHelperText,
     InputLabel,
     MenuItem,
     Select,
@@ -26,7 +27,64 @@ type Props = {
 };
 
 export default function SignUp({ handleLoginFormSelected }: Props) {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const registerSchema = object({
+        first_name: string()
+            .nonempty("Nome é obrigatório")
+            .max(40, "Nome muito longo"),
+        last_name: string()
+            .nonempty("Ultimo nome é obrigatório")
+            .max(40, "Ultimo nome é obrigatório"),
+        email: string()
+            .nonempty("Email é obrigatório")
+            .max(255, "O Email está muito longo")
+            .email("O Email é inválido"),
+        password: string()
+            .nonempty("Senha é obrigatório")
+            .min(8, "Senha deve ter no minimo 8 caracteres")
+            .max(32, "Senha deve ter no máximo 32 caracteres")
+            .regex(
+                RegexHelper.passwordRegex,
+                "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais."
+            ),
+        confirm_password: string()
+            .nonempty("Senha é obrigatório")
+            .min(8, "Senha deve ter no minimo 8 caracteres")
+            .max(32, "Senha deve ter no máximo 32 caracteres")
+            .regex(
+                RegexHelper.passwordRegex,
+                "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais."
+            ),
+        gender: string().nonempty("Genero é obrigatório"),
+    }).refine((data) => data.password === data.confirm_password, {
+        path: ["confirm_password"],
+        message: "As senhas não conferem",
+    });
+
+    type RegisterInput = TypeOf<typeof registerSchema>;
+
+    const methods = useForm<RegisterInput>({
+        resolver: zodResolver(registerSchema),
+    });
+
+    const {
+        reset,
+        handleSubmit,
+        register,
+        formState: { isSubmitSuccessful, errors },
+    } = methods;
+
+    useEffect(() => {
+        if (isSubmitSuccessful) {
+            reset();
+            setGender("");
+        }
+    }, [isSubmitSuccessful, reset]);
+
+    const onSubmitHandler: SubmitHandler<RegisterInput> = (values) => {
+        console.log(values);
+    };
+
+    const handleSubmit2 = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
@@ -39,7 +97,7 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
         });
     };
 
-    const [gender, setGender] = React.useState("");
+    const [gender, setGender] = useState("");
 
     const handleChange = (event: SelectChangeEvent) => {
         setGender(event.target.value as string);
@@ -63,7 +121,7 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
                 </Typography>
                 <Box
                     component="form"
-                    onSubmit={handleSubmit}
+                    onSubmit={handleSubmit(onSubmitHandler)}
                     noValidate
                     sx={{ mt: 1 }}
                 >
@@ -73,8 +131,14 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
                         fullWidth
                         id="first_name"
                         label="Primeiro Nome"
-                        name="first_name"
                         autoFocus
+                        error={!!errors["first_name"]}
+                        helperText={
+                            errors["first_name"]
+                                ? errors["first_name"].message
+                                : ""
+                        }
+                        {...register("first_name")}
                     />
                     <TextField
                         margin="normal"
@@ -82,7 +146,13 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
                         fullWidth
                         id="last_name"
                         label="Ultimo Nome"
-                        name="last_name"
+                        error={!!errors["last_name"]}
+                        helperText={
+                            errors["last_name"]
+                                ? errors["last_name"].message
+                                : ""
+                        }
+                        {...register("last_name")}
                     />
                     <TextField
                         margin="normal"
@@ -90,40 +160,59 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
                         fullWidth
                         id="email"
                         label="Email Address"
-                        name="email"
                         autoComplete="email"
+                        error={!!errors["email"]}
+                        helperText={
+                            errors["email"] ? errors["email"].message : ""
+                        }
+                        {...register("email")}
                     />
                     <TextField
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
                         label="Senha"
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        error={!!errors["password"]}
+                        helperText={
+                            errors["password"] ? errors["password"].message : ""
+                        }
+                        {...register("password")}
                     />
                     <TextField
                         margin="normal"
                         required
                         fullWidth
-                        name="confirm_password"
                         label="Confirme sua Senha"
                         type="password"
                         id="confirm_password"
                         autoComplete="current-password"
+                        error={!!errors["confirm_password"]}
+                        helperText={
+                            errors["confirm_password"]
+                                ? errors["confirm_password"].message
+                                : ""
+                        }
+                        {...register("confirm_password")}
                     />
                     <FormControl fullWidth required margin="normal">
                         <InputLabel>Genero</InputLabel>
                         <Select
                             value={gender}
-                            label="Genero"
+                            label={"Genero"}
+                            {...register("gender")}
                             onChange={handleChange}
                         >
+                            <MenuItem value={""}></MenuItem>
                             <MenuItem value={"Masculino"}>Masculino</MenuItem>
                             <MenuItem value={"Feminino"}>Feminino</MenuItem>
                             <MenuItem value={"Outro"}>Não Definido</MenuItem>
                         </Select>
+                        <FormHelperText error={!!errors["gender"]}>
+                            {errors["gender"] ? errors["gender"].message : ""}
+                        </FormHelperText>
                     </FormControl>
                     <Button
                         type="submit"
