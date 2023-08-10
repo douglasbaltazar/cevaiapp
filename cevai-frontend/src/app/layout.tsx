@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "./components/Navbar";
+import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import "./globals.css";
 import { darkTheme, lightTheme } from "./themes/theme";
 
@@ -14,7 +15,6 @@ export default function RootLayout({
 }) {
     let [useDarkTheme, setUseDarkTheme] = useState(false);
     let [theme, setTheme] = useState(useDarkTheme ? darkTheme : lightTheme);
-
     const changeThemeHandler = (target: ChangeEvent, currentValue: boolean) => {
         setUseDarkTheme(currentValue);
         setTheme(currentValue ? darkTheme : lightTheme);
@@ -23,7 +23,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <title>Create Next App</title>
+                <title>CeVai.app</title>
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1.0"
@@ -34,12 +34,16 @@ export default function RootLayout({
                 />
                 <link rel="icon" href="/favicon.ico" />
             </head>
-            <ThemeProvider theme={theme}>
-                <body id="__next">
-                    <CssBaseline />
-                    {children}
-                </body>
-            </ThemeProvider>
+            <AuthProvider>
+                <ThemeProvider theme={theme}>
+                    <body id="__next">
+                        <Navbar />
+
+                        <CssBaseline />
+                        {children}
+                    </body>
+                </ThemeProvider>
+            </AuthProvider>
         </html>
     );
 }

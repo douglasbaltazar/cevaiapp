@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -8,17 +8,21 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import LoginIcon from "@mui/icons-material/Login";
-import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
+
 import { object, string, TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegexHelper } from "@/app/utils/utils";
+import { AuthContext } from "@/app/contexts/AuthContext";
 
 type Props = {
     handleLoginFormSelected: () => void;
 };
 
 export default function SignIn({ handleLoginFormSelected }: Props) {
+    const { signIn } = useContext(AuthContext);
+
     const loginSchema = object({
         email: string()
             .nonempty("Email é obrigatório")
@@ -49,56 +53,8 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
         }
     }, [isSubmitSuccessful, reset]);
 
-    const onSubmitHandler: SubmitHandler<LoginInput> = (values) => {
-        axios
-            .post("http://localhost:3000/api/auth/login", values)
-            .then((res) => {
-                localStorage.setItem("token", res.data.token);
-            }).catch(() => {
-                console.log('deu bode');
-            }) 
-            .then(() => {
-                axios
-                    .get("http://localhost:3000/api/v1/users", {
-                        headers: {
-                            Authorization:
-                                "Bearer " + localStorage.getItem("token"),
-                        },
-                    })
-                    .then((res) => {
-                        console.log(res.data);
-                    });
-            });
-    };
-
-    const handleSubmit2 = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        // console.log({
-        //     email: data.get("email"),
-        //     password: data.get("password"),
-        // });
-        const form = {
-            email: data.get("email"),
-            password: data.get("password"),
-        };
-        axios
-            .post("http://localhost:3000/api/auth/login", form)
-            .then((res) => {
-                localStorage.setItem("token", res.data.token);
-            })
-            .then(() => {
-                axios
-                    .get("http://localhost:3000/api/v1/users", {
-                        headers: {
-                            Authorization:
-                                "Bearer " + localStorage.getItem("token"),
-                        },
-                    })
-                    .then((res) => {
-                        console.log(res.data);
-                    });
-            });
+    const onSubmitHandler: SubmitHandler<LoginInput> = async (values) => {
+        await signIn(values);
     };
 
     return (

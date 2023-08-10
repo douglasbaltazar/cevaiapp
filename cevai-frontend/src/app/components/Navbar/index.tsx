@@ -13,8 +13,10 @@ import MenuItem from "@mui/material/MenuItem";
 import { handleWebpackExternalForEdgeRuntime } from "next/dist/build/webpack/plugins/middleware-plugin";
 import Link from "next/link";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import { AuthContext } from "@/app/contexts/AuthContext";
 
 function Navbar() {
+    const context = React.useContext(AuthContext);
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
         null
     );
@@ -63,7 +65,11 @@ function Navbar() {
                         <Box
                             component={Link}
                             href={"http://github.com/douglasbaltazar/cevaiapp"}
-                            sx={{ p: 0, textDecoration: "none", display: 'flex' }}
+                            sx={{
+                                p: 0,
+                                textDecoration: "none",
+                                display: "flex",
+                            }}
                         >
                             <Button variant="contained" color="info">
                                 <GitHubIcon
@@ -71,9 +77,8 @@ function Navbar() {
                                         color: "white",
                                     }}
                                 />
-                                Visitar GitHub
+                                Visitar GitHub {context.user?.name}
                             </Button>
-                            
                         </Box>
                     </Tooltip>
                 </Toolbar>

@@ -26,9 +26,19 @@ export class AuthService {
 
   async login(user) {
     const payload = { sub: user.id, email: user.email };
-
-    return {
-      token: this.jwtService.sign(payload),
-    };
+    let userFound: UserEntity;
+    try {
+      userFound = await this.userService.findOne(user.id);
+      return {
+        token: this.jwtService.sign(payload),
+        user: {
+          id: user.id,
+          email: user.email,
+          name: userFound.firstName + ' ' + userFound.lastName,
+        },
+      };
+    } catch (e) {
+      return null;
+    }
   }
 }

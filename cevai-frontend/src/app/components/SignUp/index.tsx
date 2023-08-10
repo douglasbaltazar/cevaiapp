@@ -1,3 +1,4 @@
+import { useState, useEffect, useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -10,10 +11,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { object, string, TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegexHelper } from "@/app/utils/utils";
-import { useState, useEffect } from "react";
 import axios from "axios";
 
 import CreateIcon from "@mui/icons-material/Create";
+
 import {
     FormControl,
     FormHelperText,
@@ -22,12 +23,15 @@ import {
     Select,
     SelectChangeEvent,
 } from "@mui/material";
+import { IUserSignUp } from "@/app/types/User/IUserSignUp";
+import { AuthContext } from "@/app/contexts/AuthContext";
 
 type Props = {
     handleLoginFormSelected: () => void;
 };
 
 export default function SignUp({ handleLoginFormSelected }: Props) {
+    const { signUp } = useContext(AuthContext);
     const registerSchema = object({
         firstName: string()
             .nonempty("Nome é obrigatório")
@@ -80,21 +84,23 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
         }
     }, [isSubmitSuccessful, reset]);
 
-    const onSubmitHandler: SubmitHandler<RegisterInput> = (values) => {
+    const onSubmitHandler: SubmitHandler<RegisterInput> = async (values) => {
         let valores = {
             status: 0,
             ...values,
-        };
-        axios.post("http://localhost:3000/api/v1/users", valores).then(() => {
-            axios
-                .post("http://localhost:3000/api/auth/login", {
-                    email: values.email,
-                    password: values.password,
-                })
-                .then((res) => {
-                    localStorage.setItem("token", res.data.token);
-                });
-        });
+        } as IUserSignUp;
+        
+        await signUp(valores);
+        // axios.post("http://localhost:3000/api/v1/users", valores).then(() => {
+        //     axios
+        //         .post("http://localhost:3000/api/auth/login", {
+        //             email: values.email,
+        //             password: values.password,
+        //         })
+        //         .then((res) => {
+        //             localStorage.setItem("token", res.data.token);
+        //         });
+        // });
     };
 
     const handleSubmit2 = (event: React.FormEvent<HTMLFormElement>) => {

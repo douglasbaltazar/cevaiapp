@@ -21,7 +21,6 @@ export class UserService {
 
   async findOne(id: string) {
     try {
-      console.log('id', id);
       return await this.usersRepository.findOneByOrFail({ id });
     } catch (error) {
       throw new NotFoundException(error.message);
