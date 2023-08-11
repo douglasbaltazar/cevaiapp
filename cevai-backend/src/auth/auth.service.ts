@@ -3,6 +3,7 @@ import { UserEntity } from 'src/app/user/entity/User.entity';
 import { UserService } from 'src/app/user/user.service';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { AuthUserDto } from './dto/auth-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
     return user;
   }
 
-  async login(user) {
+  async login(user: AuthUserDto) {
     const payload = { sub: user.id, email: user.email };
     let userFound: UserEntity;
     try {

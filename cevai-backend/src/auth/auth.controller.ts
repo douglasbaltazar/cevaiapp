@@ -2,10 +2,14 @@ import { Controller, Post, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import {
+  ApiOperation,
+  ApiResponse,
   ApiTags,
   // ApiOperation,
   // ApiResponse
 } from '@nestjs/swagger';
+import { AuthUserEntity } from './entity/AuthUser';
+import { AuthUserDto } from './dto/auth-user.dto';
 
 @Controller('api/auth')
 @ApiTags('users')
@@ -14,7 +18,13 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Req() req: any) {
-    return await this.authService.login(req.user);
+  @ApiOperation({ summary: 'Logar um Usuario' })
+  @ApiResponse({
+    status: 201,
+    description: 'Usuario Logado',
+    type: AuthUserEntity,
+  })
+  async login(@Req() req: AuthUserDto) {
+    return await this.authService.login(req);
   }
 }
