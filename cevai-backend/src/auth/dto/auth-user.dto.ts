@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
+
+import { RegexHelper } from '../../app/helpers/regex.helper';
 import {
   MessageHelperFn,
   MessagesHelper,
-} from 'src/app/helpers/messages.helper';
-import { RegexHelper } from 'src/app/helpers/regex.helper';
+} from '../../app/helpers/messages.helper';
 
 export class AuthUserDto {
   id: string;

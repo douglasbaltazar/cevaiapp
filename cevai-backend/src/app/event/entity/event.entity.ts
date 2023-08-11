@@ -9,7 +9,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from 'src/app/user/entity/User.entity';
+import { UserEntity } from '../../user/entity/user.entity';
 
 @Entity({ name: 'events' })
 export class EventEntity {
@@ -54,4 +54,15 @@ export class EventEntity {
     },
   })
   users: UserEntity[];
+
+  constructor(event?: Partial<EventEntity>) {
+    this.id = event?.id;
+    this.name = event?.name;
+    this.bands = event?.bands;
+    this.createdAt = event?.createdAt;
+    this.deletedAt = event?.deletedAt;
+    this.status = event?.status;
+    this.users = event?.users;
+    this.updatedAt = event?.updatedAt;
+  }
 }

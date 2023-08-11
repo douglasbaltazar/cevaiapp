@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { hashSync } from 'bcrypt';
-import { EventEntity } from 'src/app/event/entity/event.entity';
+import { EventEntity } from '../../event/entity/event.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'users' })
