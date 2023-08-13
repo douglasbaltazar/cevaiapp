@@ -40,12 +40,6 @@ const eventEntityList: EventEntity[] = [
   }),
 ];
 
-const newEventEntity = new EventEntity({
-  bands: 'DJ Figs',
-  name: 'Social 40º',
-  status: 0,
-});
-
 const updatedEventEntity = new EventEntity({
   name: 'Social40º',
   createdAt: undefined,

@@ -74,4 +74,18 @@ export class UserEntity {
     },
   })
   events: EventEntity[];
+
+  constructor(user?: Partial<UserEntity>) {
+    this.createdAt = user?.createdAt;
+    this.deletedAt = user?.deletedAt;
+    this.email = user?.email;
+    this.events = user?.events;
+    this.firstName = user?.firstName;
+    this.gender = user?.gender;
+    this.id = user?.id;
+    this.lastName = user?.lastName;
+    this.password = user?.password;
+    this.status = user?.status;
+    this.updatedAt = user?.updatedAt;
+  }
 }
