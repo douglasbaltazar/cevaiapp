@@ -205,6 +205,7 @@ describe('EventService', () => {
     });
 
     it('should throw a not found expceiton', () => {
+      // Arrange
       jest
         .spyOn(eventRepository, 'findOneByOrFail')
         .mockRejectedValueOnce(new Error());
