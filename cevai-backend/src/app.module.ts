@@ -3,7 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { EventModule } from './app/event/event.module';
 import { UserModule } from './app/user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './app/auth/auth.module';
+import { UserEntity } from './app/user/entity/user.entity';
+import { EventEntity } from './app/event/entity/event.entity';
 
 @Module({
   imports: [

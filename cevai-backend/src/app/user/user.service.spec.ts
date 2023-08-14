@@ -147,11 +147,7 @@ describe('UserService', () => {
     };
     it('should create an user entity item successfully', async () => {
       // Act
-
-      console.log('Create', data);
       const result = await userService.create(data);
-
-      console.log(result);
 
       // Assert
       expect(result).toEqual(userEntityList[0]);

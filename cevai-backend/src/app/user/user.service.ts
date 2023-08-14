@@ -16,6 +16,8 @@ export class UserService {
   async findAll() {
     return await this.usersRepository.find({
       select: ['id', 'firstName', 'lastName', 'email', 'status', 'gender'],
+      order: { createdAt: 'DESC' },
+      relations: { events: true },
     });
   }
 

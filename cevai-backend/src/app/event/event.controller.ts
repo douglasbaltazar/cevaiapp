@@ -3,6 +3,7 @@ import {
   Get,
   Put,
   Post,
+  Res,
   Delete,
   Body,
   Param,
@@ -11,6 +12,7 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -22,10 +24,11 @@ import UpdateEventSwagger from './swagger/update-event.swagger';
 import { BadRequestSwagger } from '../helpers/swagger/bad-request.swagger';
 import { NotFoundSwagger } from '../helpers/swagger/not-found.swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { MessagesHelper } from '../helpers/messages.helper';
 
 @Controller('api/v1/events')
 @ApiTags('events')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
@@ -113,5 +116,64 @@ export class EventController {
   })
   async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
     await this.eventService.deleteById(id);
+  }
+
+  @Post('/:eventId/:userId')
+  async putUserToParty(
+    @Param('eventId', new ParseUUIDPipe()) eventId: string,
+    @Param('userId', new ParseUUIDPipe()) userId: string,
+    // req: Request,
+    @Res() res: Response,
+  ) {
+    await this.eventService.putUserToEvent(userId, eventId).then((resp) => {
+      if (resp.response) {
+        res.status(HttpStatus.CREATED).json({
+          message: resp.message,
+          status: 'success',
+        });
+      } else {
+        res
+          .status(resp.statusCode)
+          .json({
+            message: resp.message,
+            status: 'error',
+          })
+          .send();
+      }
+    });
+  }
+  @Delete('/:eventId/:userId')
+  async removeUserToParty(
+    @Param('eventId', new ParseUUIDPipe()) eventId: string,
+    @Param('userId', new ParseUUIDPipe()) userId: string,
+    // req: Request,
+    @Res() res: Response,
+  ) {
+    await this.eventService.removeUserToEvent(userId, eventId).then((resp) => {
+      if (resp.response) {
+        res.status(HttpStatus.CREATED).json({
+          message: resp.message,
+          status: 'success',
+        });
+      } else {
+        res
+          .status(resp.statusCode)
+          .json({
+            message: resp.message,
+            status: 'error',
+          })
+          .send();
+      }
+    });
+    // if (await this.eventService.removeUserToEvent(userId, eventId)) {
+    //   res.status(HttpStatus.CREATED).json({
+    //     message: `O usuario de Id ${userId} removido com sucesso no evento de id ${eventId}`,
+    //   });
+    // } else {
+    //   res.status(404).json({
+    //     message: MessagesHelper.ERROR_404_MSG_USER_EVENT,
+    //     error: MessagesHelper.ERROR_404,
+    //   });
+    // }
   }
 }

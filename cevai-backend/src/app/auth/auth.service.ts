@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from '../app/user/entity/user.entity';
-import { UserService } from '../app/user/user.service';
+import { UserEntity } from '../../app/user/entity/user.entity';
+import { UserService } from '../../app/user/user.service';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthUserDto } from './dto/auth-user.dto';
@@ -33,8 +33,8 @@ export class AuthService {
       return {
         token: this.jwtService.sign(payload),
         user: {
-          id: user.id,
-          email: user.email,
+          id: userFound.id,
+          email: userFound.email,
           name: userFound.firstName + ' ' + userFound.lastName,
         },
       };

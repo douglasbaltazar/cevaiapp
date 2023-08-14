@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsIn } from 'class-validator';
 import { MessageHelperFn } from '../../../app/helpers/messages.helper';
+import { UserEntity } from 'src/app/user/entity/user.entity';
 
 export class CreateEventDto {
   @IsNotEmpty({ message: MessageHelperFn('name') })

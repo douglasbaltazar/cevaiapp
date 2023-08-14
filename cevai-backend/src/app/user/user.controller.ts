@@ -64,7 +64,7 @@ export class UserController {
     return await this.userService.create(body);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   @ApiOperation({ summary: 'Listar um Usuario por Id' })
   @ApiResponse({
@@ -87,7 +87,7 @@ export class UserController {
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Update de um usuario' })
   @ApiResponse({
     status: 200,
@@ -112,7 +112,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete de um Usuario' })
   @ApiResponse({ status: 204, description: 'Usuario removido' })
