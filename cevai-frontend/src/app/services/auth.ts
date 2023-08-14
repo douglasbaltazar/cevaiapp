@@ -10,7 +10,7 @@ export async function SignInRequest(data: IUserSignIn) {
         .post("http://localhost:3000/api/auth/login", data)
         .then(({ data }: AxiosResponse<IUserSignInResponse>) => {
             // console.log("res", data);
-
+            
             return {
                 token: data.token,
                 user: data.user,

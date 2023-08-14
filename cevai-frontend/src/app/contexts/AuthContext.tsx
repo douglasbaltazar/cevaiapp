@@ -48,6 +48,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             password,
         });
 
+        console.log(user);
+
         setCookie(undefined, "cevaiapp.token", token, {
             maxAge: 60 * 60 * 24, // 1 dia
         });

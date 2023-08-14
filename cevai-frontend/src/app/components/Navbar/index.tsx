@@ -2,42 +2,34 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import { handleWebpackExternalForEdgeRuntime } from "next/dist/build/webpack/plugins/middleware-plugin";
 import Link from "next/link";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { AuthContext } from "@/app/contexts/AuthContext";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { destroyCookie } from "nookies";
+import { useRouter } from "next/navigation";
 
 function Navbar() {
     const context = React.useContext(AuthContext);
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-        null
-    );
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-        null
-    );
+    const router = useRouter();
+    const [isLoged, setIsLoged] = React.useState<boolean>(true);
 
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
+    const handleClickLogout = () => {
+        console.log("logout");
+        destroyCookie(undefined, "cevaiapp.token");
+        destroyCookie(undefined, "cevaiapp.userId");
+        console.log(context.user);
+        context.user = null;
+        console.log(context.user);
+        setIsLoged(false);
+        router.push("/");
     };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+    React.useEffect(() => {
+        setIsLoged(true);
+    }, [context])
 
     return (
         <AppBar position="static">
@@ -61,26 +53,45 @@ function Navbar() {
 
                     <Box sx={{ flexGrow: 1 }} />
 
-                    <Tooltip title="github.com/douglasbaltazar/cevaiapp">
-                        <Box
-                            component={Link}
-                            href={"http://github.com/douglasbaltazar/cevaiapp"}
-                            sx={{
-                                p: 0,
-                                textDecoration: "none",
-                                display: "flex",
-                            }}
-                        >
-                            <Button variant="contained" color="info">
-                                <GitHubIcon
-                                    sx={{
-                                        color: "white",
-                                    }}
-                                />
-                                Visitar GitHub {context.user?.name}
+                    {context?.user?.name && isLoged ? (
+                        <Tooltip title="github.com/douglasbaltazar/cevaiapp">
+                            <Button
+                                variant="contained"
+                                color="inherit"
+                                sx={{
+                                    padding: 1,
+                                    color: "blue",
+                                }}
+                                onClick={() => handleClickLogout()}
+                            >
+                                <LogoutIcon sx={{ color: "blue" }} />
+                                Fazer Logout
                             </Button>
-                        </Box>
-                    </Tooltip>
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title="github.com/douglasbaltazar/cevaiapp">
+                            <Box
+                                component={Link}
+                                href={
+                                    "http://github.com/douglasbaltazar/cevaiapp"
+                                }
+                                sx={{
+                                    p: 0,
+                                    textDecoration: "none",
+                                    display: "flex",
+                                }}
+                            >
+                                <Button variant="contained" color="info">
+                                    <GitHubIcon
+                                        sx={{
+                                            color: "white",
+                                        }}
+                                    />
+                                    Visitar GitHub
+                                </Button>
+                            </Box>
+                        </Tooltip>
+                    )}
                 </Toolbar>
             </Container>
         </AppBar>
