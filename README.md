@@ -17,6 +17,7 @@
 #### FrontEnd
   - NextJS
   - TypeScript
+  - Material UI
 
 
 #### Banco de Dados
