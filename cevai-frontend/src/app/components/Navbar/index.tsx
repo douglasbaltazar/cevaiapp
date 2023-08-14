@@ -29,27 +29,43 @@ function Navbar() {
     };
     React.useEffect(() => {
         setIsLoged(true);
-    }, [context])
+    }, [context]);
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" color="inherit">
             <Container maxWidth="xl">
-                <Toolbar disableGutters>
+                <Toolbar
+                    disableGutters
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "6rem",
+                    }}
+                >
                     <Box
-                        component="img"
-                        src="imgs/cevailogowhite.png"
-                        alt="CeVaiLogo"
-                        height={"35px"}
+                        component={Link}
+                        href={"/"}
                         sx={{
-                            mr: 2,
-                            display: { xs: "none", md: "flex" },
-                            fontFamily: "monospace",
-                            fontWeight: 700,
-                            letterSpacing: ".3rem",
-                            color: "inherit",
-                            textDecoration: "none",
+                            cursor: "pointer",
                         }}
-                    ></Box>
+                    >
+                        <Box
+                            component="img"
+                            src="imgs/cevailogoblack.png"
+                            alt="CeVaiLogo"
+                            height={"50px"}
+                            sx={{
+                                mr: 2,
+                                display: { xs: "none", md: "flex" },
+                                fontFamily: "monospace",
+                                fontWeight: 700,
+                                letterSpacing: ".3rem",
+                                color: "inherit",
+                                textDecoration: "none",
+                            }}
+                        ></Box>
+                    </Box>
 
                     <Box sx={{ flexGrow: 1 }} />
 
@@ -60,7 +76,7 @@ function Navbar() {
                                 color="inherit"
                                 sx={{
                                     padding: 1,
-                                    color: "blue",
+                                    color: "black",
                                 }}
                                 onClick={() => handleClickLogout()}
                             >
@@ -69,28 +85,70 @@ function Navbar() {
                             </Button>
                         </Tooltip>
                     ) : (
-                        <Tooltip title="github.com/douglasbaltazar/cevaiapp">
-                            <Box
-                                component={Link}
-                                href={
-                                    "http://github.com/douglasbaltazar/cevaiapp"
-                                }
+                        <Box
+                            sx={{
+                                display: "flex",
+                                gap: "1rem",
+                            }}
+                        >
+                            <Button
+                                variant="text"
                                 sx={{
-                                    p: 0,
-                                    textDecoration: "none",
-                                    display: "flex",
+                                    color: "black",
+                                    "&:hover": {
+                                        color: "red",
+                                    },
                                 }}
+                                onClick={() => router.push('/')}
                             >
-                                <Button variant="contained" color="info">
-                                    <GitHubIcon
-                                        sx={{
-                                            color: "white",
-                                        }}
-                                    />
-                                    Visitar GitHub
-                                </Button>
-                            </Box>
-                        </Tooltip>
+                                Eventos
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    color: "black",
+                                    "&:hover": {
+                                        color: "red",
+                                        borderColor: "red",
+                                        transition: "0.5s",
+                                        boxShadow:
+                                            "0px 0px 0px 0px rgba(0,0,0,0.3)",
+                                        backgroundColor: "#ebeff0",
+                                    },
+                                    padding: 2,
+                                    borderRadius: "10px",
+                                    borderColor: "black",
+                                    border: "1px solid transparent",
+                                    boxShadow:
+                                        "0px 0px 0px 1px rgba(0,0,0,0.3)",
+                                }}
+                                onClick={() => router.push("/login")}
+                            >
+                                Conta
+                            </Button>
+                            <Tooltip title="github.com/douglasbaltazar/cevaiapp">
+                                <Box
+                                    component={Link}
+                                    href={
+                                        "http://github.com/douglasbaltazar/cevaiapp"
+                                    }
+                                    sx={{
+                                        p: 0,
+                                        textDecoration: "none",
+                                        display: "flex",
+                                    }}
+                                >
+                                    <Button variant="contained" color="info">
+                                        <GitHubIcon
+                                            sx={{
+                                                color: "white",
+                                            }}
+                                        />
+                                        Visitar GitHub
+                                    </Button>
+                                </Box>
+                            </Tooltip>
+                        </Box>
                     )}
                 </Toolbar>
             </Container>

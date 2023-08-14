@@ -1,3 +1,4 @@
+import { AuthContext } from "@/app/contexts/AuthContext";
 import { IEvent } from "@/app/types/Event/IEvent";
 import {
     Card,
@@ -7,18 +8,20 @@ import {
     CardActions,
     Button,
 } from "@mui/material";
+import { useContext } from "react";
 
 type Props = {
-  evento: IEvent;
-}
+    evento: IEvent;
+};
 
-export default function EventCard({evento}: Props) {
+export default function EventCard({ evento }: Props) {
+    const context = useContext(AuthContext);
     return (
         <Card sx={{ maxWidth: 345, p: 2 }}>
             <CardMedia
                 sx={{ height: 140 }}
-                image="/static/images/cards/contemplative-reptile.jpg"
-                title="green iguana"
+                image="/imgs/bg.jpg"
+                title={evento.name}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -28,10 +31,12 @@ export default function EventCard({evento}: Props) {
                     {evento.bands}
                 </Typography>
             </CardContent>
-            <CardActions>
-                <Button size="small">Vou</Button>
-                <Button size="small">Não vou</Button>
-            </CardActions>
+            {context?.user?.name && (
+                <CardActions>
+                    <Button size="small">Vou</Button>
+                    <Button size="small">Não vou</Button>
+                </CardActions>
+            )}
         </Card>
     );
 }

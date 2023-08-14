@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import "./globals.css";
@@ -41,6 +42,7 @@ export default function RootLayout({
 
                         <CssBaseline />
                         {children}
+                        <Footer />
                     </body>
                 </ThemeProvider>
             </AuthProvider>
