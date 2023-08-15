@@ -55,3 +55,4 @@ export async function recoverUserInformation(id: string) {
             console.log("Deu bode ", e);
         });
 }
+
