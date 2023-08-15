@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -15,6 +15,7 @@ import { object, string, TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegexHelper } from "@/app/utils/utils";
 import { AuthContext } from "@/app/contexts/AuthContext";
+import { Slide, Snackbar } from "@mui/material";
 
 type Props = {
     handleLoginFormSelected: () => void;
@@ -22,6 +23,10 @@ type Props = {
 
 export default function SignIn({ handleLoginFormSelected }: Props) {
     const { signIn } = useContext(AuthContext);
+    const [openErrorSnackBar, setOpenErrorSnackBar] = useState<boolean>(false);
+    const [errorMessageSnackBar, setErrorMessageSnackBar] =
+        useState<string>("");
+    const router = useRouter();
 
     const loginSchema = object({
         email: string()
@@ -54,11 +59,33 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
     }, [isSubmitSuccessful, reset]);
 
     const onSubmitHandler: SubmitHandler<LoginInput> = async (values) => {
-        await signIn(values);
+        const res = await signIn(values).then((resp) => {
+            if (resp.status === "success") {
+                router.push("/feed");
+                reset();
+            } else {
+                setErrorMessageSnackBar("" + resp?.error);
+                setOpenErrorSnackBar(true);
+                reset();
+            }
+        });
+    };
+
+    const handleCloseErrorSnackBar = () => {
+        setOpenErrorSnackBar(false);
     };
 
     return (
         <Container component="main" maxWidth="xs">
+            <Snackbar
+                color="error"
+                anchorOrigin={{ horizontal: "center", vertical: "top" }}
+                open={openErrorSnackBar}
+                onClose={handleCloseErrorSnackBar}
+                // TransitionComponent={<Slide direction="up" />}
+                message={errorMessageSnackBar}
+                autoHideDuration={2000}
+            />
             <Box
                 sx={{
                     marginTop: 8,
@@ -86,6 +113,7 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
                         id="email"
                         label="E-mail"
                         autoComplete="email"
+                        // placeholder="Digite seu email"
                         autoFocus
                         error={!!errors["email"]}
                         helperText={
@@ -101,6 +129,7 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        // placeholder="Digite sua senha"
                         error={!!errors["password"]}
                         helperText={
                             errors["password"] ? errors["password"].message : ""

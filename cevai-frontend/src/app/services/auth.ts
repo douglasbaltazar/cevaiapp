@@ -5,20 +5,26 @@ import { api } from "./api";
 import { IUserSignUp } from "../types/User/IUserSignUp";
 import { IUserSignUpResponse } from "../types/User/IUserSignUpResponse";
 
-export async function SignInRequest(data: IUserSignIn) {
+export async function SignInRequest(
+    data: IUserSignIn
+): Promise<IUserSignInResponse> {
     return api
         .post("http://localhost:3000/api/auth/login", data)
         .then(({ data }: AxiosResponse<IUserSignInResponse>) => {
-            // console.log("res", data);
-            
             return {
                 token: data.token,
                 user: data.user,
-            };
+                status: "success",
+            } as IUserSignInResponse;
             // localStorage.setItem("token", res.data.token);
         })
         .catch((e) => {
-            console.log("Error: ", e);
+            return {
+                token: "",
+                user: {},
+                status: "error",
+                error: e.response.data.message,
+            } as IUserSignInResponse;
         });
 }
 
@@ -26,10 +32,10 @@ export async function SignUpRequest(data: IUserSignUp) {
     const { email, password } = data;
     return api
         .post("http://localhost:3000/api/v1/users", data)
-        .then(({ data }: AxiosResponse<IUserSignUpResponse>)  => {
+        .then(({ data }: AxiosResponse<IUserSignUpResponse>) => {
             // SignInRequest({ email, password } as IUserSignIn);
             return {
-                user: data
+                user: data,
             };
         });
 }

@@ -21,8 +21,6 @@ export default function Page() {
         test();
     }, []);
 
-    console.log(events);
-
     if (!token) {
         router.push("/");
     }

@@ -18,7 +18,7 @@ import { IUserSignInResponse } from "../types/User/IUserSignInResponse";
 type AuthContextType = {
     isAuthenticated: boolean;
     user: IUser | null;
-    signIn: (data: IUserSignIn) => Promise<void>;
+    signIn: (data: IUserSignIn) => Promise<IUserSignInResponse>;
     signUp: (data: IUserSignUp) => Promise<void>;
 };
 
@@ -42,13 +42,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    async function signIn({ email, password }: IUserSignIn) {
-        const { token, user } = await SignInRequest({
+    async function signIn({
+        email,
+        password,
+    }: IUserSignIn): Promise<IUserSignInResponse> {
+        const { token, user, status, error } = await SignInRequest({
             email,
             password,
         });
-
-        console.log(user);
 
         setCookie(undefined, "cevaiapp.token", token, {
             maxAge: 60 * 60 * 24, // 1 dia
@@ -61,7 +62,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
         setUser(user);
-        router.push("/feed");
+
+        return {
+            token,
+            user,
+            status,
+            error,
+        } as IUserSignInResponse;
     }
     async function signUp(data: IUserSignUp) {
         console.log(await SignUpRequest(data));

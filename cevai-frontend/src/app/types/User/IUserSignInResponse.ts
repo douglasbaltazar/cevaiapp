@@ -1,6 +1,8 @@
 export interface IUserSignInResponse {
     token: string;
     user: IUserSignInResponseUser;
+    status: string;
+    error?: string;
 }
 
 interface IUserSignInResponseUser {

@@ -89,7 +89,7 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
             status: 0,
             ...values,
         } as IUserSignUp;
-        
+
         await signUp(valores);
         // axios.post("http://localhost:3000/api/v1/users", valores).then(() => {
         //     axios
@@ -101,19 +101,6 @@ export default function SignUp({ handleLoginFormSelected }: Props) {
         //             localStorage.setItem("token", res.data.token);
         //         });
         // });
-    };
-
-    const handleSubmit2 = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            password: data.get("password"),
-            confirm_password: data.get("confirm_password"),
-            gender,
-        });
     };
 
     const [gender, setGender] = useState("");

@@ -18,12 +18,9 @@ function Navbar() {
     const [isLoged, setIsLoged] = React.useState<boolean>(true);
 
     const handleClickLogout = () => {
-        console.log("logout");
         destroyCookie(undefined, "cevaiapp.token");
         destroyCookie(undefined, "cevaiapp.userId");
-        console.log(context.user);
         context.user = null;
-        console.log(context.user);
         setIsLoged(false);
         router.push("/");
     };

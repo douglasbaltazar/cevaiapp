@@ -17,13 +17,17 @@ type Props = {
 export default function EventCard({ evento }: Props) {
     const context = useContext(AuthContext);
     return (
-        <Card sx={{ maxWidth: 345, p: 2 }}>
+        <Card sx={{ maxWidth: 345 }}>
             <CardMedia
-                sx={{ height: 140 }}
+                sx={{ height: 140, objectFit: "fill" }}
                 image="/imgs/bg.jpg"
                 title={evento.name}
             />
-            <CardContent>
+            <CardContent
+                sx={{
+                    p: 2,
+                }}
+            >
                 <Typography gutterBottom variant="h5" component="div">
                     {evento.name}
                 </Typography>
