@@ -1,3 +1,4 @@
+import { IEvent } from "../types/Event/IEvent";
 import { api } from "./api";
 
 export async function putUserToEvent(userId: string, eventId: string) {
@@ -19,5 +20,18 @@ export async function removeUserToEvent(userId: string, eventId: string) {
         })
         .catch(({ response }) => {
             return response?.data;
+        });
+}
+
+export async function getEventDetail(eventId: string) {
+    return await api
+        .get(`/api/v1/events/${eventId}`)
+        .then(({ data }) => {
+            console.log("aqui2", data);
+            return data;
+        })
+        .catch((e) => {
+            console.log("3");
+            return null;
         });
 }

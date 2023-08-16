@@ -1,3 +1,5 @@
+import { ICompleteUser } from "../User/IUser";
+
 export interface IEvent {
     id: string;
     name: string;
@@ -6,6 +8,7 @@ export interface IEvent {
     createdAt: string;
     updatedAt: string;
     deletedAt: string;
+    users?: ICompleteUser[];
 }
 
 export interface IEventsList {

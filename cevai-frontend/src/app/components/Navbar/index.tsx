@@ -11,6 +11,7 @@ import { AuthContext } from "@/app/contexts/AuthContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { destroyCookie } from "nookies";
 import { useRouter } from "next/navigation";
+import ImageSource from "../../../../public/imgs/cevailogoblack.png";
 
 function Navbar() {
     const context = React.useContext(AuthContext);
@@ -49,7 +50,7 @@ function Navbar() {
                     >
                         <Box
                             component="img"
-                            src="imgs/cevailogoblack.png"
+                            src={`${ImageSource.src}`}
                             alt="CeVaiLogo"
                             height={"50px"}
                             sx={{
@@ -96,7 +97,7 @@ function Navbar() {
                                         color: "red",
                                     },
                                 }}
-                                onClick={() => router.push('/')}
+                                onClick={() => router.push("/")}
                             >
                                 Eventos
                             </Button>
