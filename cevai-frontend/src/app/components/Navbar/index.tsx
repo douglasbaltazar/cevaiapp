@@ -43,7 +43,7 @@ function Navbar() {
                 >
                     <Box
                         component={Link}
-                        href={"/"}
+                        href={context?.user?.name && isLoged ? "/feed" : "/"}
                         sx={{
                             cursor: "pointer",
                         }}
