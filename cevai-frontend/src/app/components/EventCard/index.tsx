@@ -10,6 +10,7 @@ import {
     Button,
     Box,
     Snackbar,
+    CardActionArea,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
@@ -64,23 +65,25 @@ export default function EventCard({ evento }: Props) {
                 message={messageSnackBar}
                 autoHideDuration={2000}
             />
-            <CardMedia
-                sx={{ height: 140, objectFit: "fill" }}
-                image="/imgs/bg.jpg"
-                title={evento.name}
-            />
-            <CardContent
-                sx={{
-                    p: 2,
-                }}
-            >
-                <Typography gutterBottom variant="h5" component="div">
-                    {evento.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    {evento.bands}
-                </Typography>
-            </CardContent>
+            <CardActionArea onClick={() => router.push(`/event/${evento.id}`)}>
+                <CardMedia
+                    sx={{ height: 140, objectFit: "fill" }}
+                    image="/imgs/bg.jpg"
+                    title={evento.name}
+                />
+                <CardContent
+                    sx={{
+                        p: 2,
+                    }}
+                >
+                    <Typography gutterBottom variant="h5" component="div">
+                        {evento.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {evento.bands}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
             {context?.user?.name && (
                 <CardActions>
                     <Box

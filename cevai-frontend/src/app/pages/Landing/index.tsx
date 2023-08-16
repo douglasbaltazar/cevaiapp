@@ -34,9 +34,10 @@ export default function Landing() {
         // console.log(events?.filter((event) => event.name.includes(search)));
         console.log();
         setEvents(
-            events?.filter(
+            eventsDefaults?.filter(
                 (event) =>
-                    event.name.includes(search) || event.bands.includes(search)
+                    event.name.toLowerCase().includes(search.toLowerCase()) ||
+                    event.bands.toLowerCase().includes(search.toLowerCase())
             )
         );
         if (search === "") {
