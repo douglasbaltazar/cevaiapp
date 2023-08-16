@@ -14,3 +14,9 @@ export interface IEvent {
 export interface IEventsList {
     events: IEvent[];
 }
+
+export interface ICreateEvent {
+    name: string;
+    bands: string;
+    status?: number;
+}

@@ -1,4 +1,4 @@
-import { IEvent } from "../types/Event/IEvent";
+import { ICreateEvent, IEvent } from "../types/Event/IEvent";
 import { api } from "./api";
 
 export async function putUserToEvent(userId: string, eventId: string) {
@@ -31,7 +31,20 @@ export async function getEventDetail(eventId: string) {
             return data;
         })
         .catch((e) => {
-            console.log("3");
+            // console.log("3");
+            return null;
+        });
+}
+
+export async function createNewEvent(evento: ICreateEvent) {
+    return await api
+        .post("/api/v1/events", evento)
+        .then(({ data }) => {
+            console.log(data);
+            return data;
+        })
+        .catch((e) => {
+            console.log(e);
             return null;
         });
 }

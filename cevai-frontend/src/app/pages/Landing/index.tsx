@@ -8,19 +8,24 @@ import {
 } from "@mui/material";
 import Navbar from "../../components/Navbar";
 import SignIn from "../../components/SignIn";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import SignUp from "../../components/SignUp";
 import { IEvent } from "@/app/types/Event/IEvent";
 import { getAPIClient } from "@/app/services/axios";
 import EventCard from "@/app/components/EventCard";
 import SearchIcon from "@mui/icons-material/Search";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "@/app/contexts/AuthContext";
+
 // import Image from 'imgs/bg.jpg'
 
 export default function Landing() {
-    const [loginFormSelected, setLoginFormSelected] = useState(true);
+    const context = useContext(AuthContext);
+    const router = useRouter();
     const [events, setEvents] = useState<IEvent[]>();
     const [eventsDefaults, setEventsDefaults] = useState<IEvent[]>();
     const apiClient = getAPIClient();
+
     useEffect(() => {
         async function test() {
             setEvents((await apiClient.get("/api/v1/events")).data);
@@ -32,7 +37,6 @@ export default function Landing() {
         // console.log();
         // console.log("search", search);
         // console.log(events?.filter((event) => event.name.includes(search)));
-        console.log();
         setEvents(
             eventsDefaults?.filter(
                 (event) =>
@@ -141,7 +145,7 @@ export default function Landing() {
             <Box>
                 <Container
                     sx={{
-                        paddingTop: 10,
+                        paddingTop: 4,
                     }}
                 >
                     <Box
@@ -168,7 +172,14 @@ export default function Landing() {
                             // onChange={() => }
                         ></Input>
                     </Box>
-                    <Typography variant="h5">Próximos eventos</Typography>
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            marginTop: 5,
+                        }}
+                    >
+                        Próximos eventos
+                    </Typography>
                     <Box
                         sx={{
                             display: "flex",

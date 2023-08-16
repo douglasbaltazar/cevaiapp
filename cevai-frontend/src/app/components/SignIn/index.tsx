@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegexHelper } from "@/app/utils/utils";
 import { AuthContext } from "@/app/contexts/AuthContext";
 import { Slide, Snackbar } from "@mui/material";
+import { loginSchema } from "@/app/schemas/loginSchema";
 
 type Props = {
     handleLoginFormSelected: () => void;
@@ -28,20 +29,6 @@ export default function SignIn({ handleLoginFormSelected }: Props) {
         useState<string>("");
     const router = useRouter();
 
-    const loginSchema = object({
-        email: string()
-            .nonempty("Email é obrigatório")
-            .max(255, "O Email está muito longo")
-            .email("O Email é inválido"),
-        password: string()
-            .nonempty("Senha é obrigatório")
-            .min(8, "Senha deve ter no minimo 8 caracteres")
-            .max(32, "Senha deve ter no máximo 32 caracteres")
-            .regex(
-                RegexHelper.passwordRegex,
-                "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais."
-            ),
-    });
     type LoginInput = TypeOf<typeof loginSchema>;
     const {
         register,

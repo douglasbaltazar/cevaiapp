@@ -68,20 +68,50 @@ function Navbar() {
                     <Box sx={{ flexGrow: 1 }} />
 
                     {context?.user?.name && isLoged ? (
-                        <Tooltip title="github.com/douglasbaltazar/cevaiapp">
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                gap: '1rem'
+                            }}
+                        >
                             <Button
-                                variant="contained"
-                                color="inherit"
+                                variant="outlined"
                                 sx={{
-                                    padding: 1,
                                     color: "black",
+                                    "&:hover": {
+                                        color: "red",
+                                        borderColor: "red",
+                                        transition: "0.5s",
+                                        boxShadow:
+                                            "0px 0px 0px 0px rgba(0,0,0,0.3)",
+                                        backgroundColor: "#ebeff0",
+                                    },
+                                    padding: 2,
+                                    borderRadius: "10px",
+                                    borderColor: "black",
+                                    border: "1px solid transparent",
+                                    boxShadow:
+                                        "0px 0px 0px 1px rgba(0,0,0,0.3)",
                                 }}
-                                onClick={() => handleClickLogout()}
+                                onClick={() => router.push("/event/create")}
                             >
-                                <LogoutIcon sx={{ color: "blue" }} />
-                                Fazer Logout
+                                Criar Evento
                             </Button>
-                        </Tooltip>
+                            <Tooltip title="github.com/douglasbaltazar/cevaiapp">
+                                <Button
+                                    variant="contained"
+                                    color="inherit"
+                                    sx={{
+                                        padding: 1,
+                                        color: "black",
+                                    }}
+                                    onClick={() => handleClickLogout()}
+                                >
+                                    <LogoutIcon sx={{ color: "blue" }} />
+                                    Fazer Logout
+                                </Button>
+                            </Tooltip>
+                        </Box>
                     ) : (
                         <Box
                             sx={{
